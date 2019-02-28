@@ -16,7 +16,7 @@ app.config.from_object(config)
 #   port = 5432
 #   )
 
-if os.environ.get("Database") == 'heroku':
+if os.environ.get("database") == 'heroku':
    DatabaseConnection = psycopg2.connect(database = "d7lrmgbjs3a0im",user="qzgoznoygmxmvo", password="da463569b47a5c48c1c7e0b19bf91e3535c4e3ace4bba892260bf9850c9f6e88",host="ec2-23-21-165-188.compute-1.amazonaws.com",port=5432)
 else: 
   DatabaseConnection = psycopg2.connect(database ="testdb")
