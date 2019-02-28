@@ -1,9 +1,9 @@
 # chal-3-ireporter
 
 # IREPORTER
-[![Build Status](https://travis-ci.org/jennizalwango/chal-3-ireporter.svg?branch=chall3)](https://travis-ci.org/jennizalwango/chal-3-ireporter)
+[![Build Status](https://travis-ci.org/jennizalwango/chal-3-ireporter.svg?branch=chall3)](https://travis-ci.org/jennizalwango/chal-3-ireporter) [![Coverage Status](https://coveralls.io/repos/github/jennizalwango/chal-3-ireporter/badge.svg?branch=chall3)](https://coveralls.io/github/jennizalwango/chal-3-ireporter?branch=chall3)
 
-[![Coverage Status](https://coveralls.io/repos/github/jennizalwango/chal-3-ireporter/badge.svg)](https://coveralls.io/github/jennizalwango/chal-3-ireporter)
+
 
 I-Reporter is a platform where people can report incidents of corruption.
 Users can do the following;
