@@ -3,3 +3,6 @@ env/
 .pytest_cache/
 *.pyc
 .__pycache__/
+*.app/models/__pycache__/__init__.cpython-36.pyc
+*.app/models/__pycache__/incident_model.cpython-36.pyc
+*.app/models/__pycache__/user_model.cpython-36.pyc

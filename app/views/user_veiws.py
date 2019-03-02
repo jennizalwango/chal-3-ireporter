@@ -1,4 +1,4 @@
-from app import DatabaseConnection
+from app.conn_database.database import DatabaseConnection
 from flask.views import MethodView
 from flask import request ,jsonify
 from app.views.validations import Validations

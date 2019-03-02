@@ -3,10 +3,10 @@ import jwt
 from functools import wraps
 from flask import request, jsonify
 from app.config import BaseConfig
-from app import DatabaseConnection
+from app.conn_database.database import DatabaseConnection
 from app.models.user_model import User
 
-cursor = DatabaseConnection.cursor()
+db = DatabaseConnection()
 configuration = BaseConfig()
 
 configuration.SECRET_KEY
