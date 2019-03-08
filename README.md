@@ -73,11 +73,11 @@ All done! Now,start your server by running  `python run_server.py`.
 -Delete red flag record
 
 ## Supported Endpoints
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST   |/api/v1/register/ |Create User|
-| POST   |/api/v1/login/ |Log in User|
-| POST   |/api/v1/incident/ |Create red flag or intervention|
+| Method | Endpoint | Description | Body  |
+|--------|----------|-------------|-------|
+| POST   |/api/v1/register/ |Create User|{"username":"jenny", "password":"jenny23", "email":"jenny23@gmail.com", "phone_number":"25670645783", "is_admin": true}|
+| POST   |/api/v1/login/ |Log in User|{"username": "jenny", "password":"jenny23"}|
+| POST   |/api/v1/incident/ |Create red flag or intervention|{"incident_type": "redflag", "title":"bad roads", "created_by":"1", "location": "bunga", "status": "draft", "comment":"they flood when it rains"}|
 | GET    |/api/v1/incident/all|Get all created incidents|
 | GET    |/api/v1/incident/<incident_id>/|Get specific red flag|
 | PATCH  |/api/v1/incident/<incident_id>/location/|Edit red flag location|

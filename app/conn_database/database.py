@@ -11,6 +11,7 @@ class DatabaseConnection:
   def __init__(self):
     try:
       if os.environ.get("APP_ENV") == "development":
+        print("APP_ENV")
         self.connection = psycopg2.connect(
           database = config.DATABASE_NAME, 
           password = config.DATABASE_PASSWORD, 

@@ -35,8 +35,7 @@ class User:
     # here we use subquries because we dont want to return \
     # some data from the database like the password 
     query = "SELECT row_to_json(result) FROM (SELECT user_id, username, email,\
-       phone_number, is_admin FROM users) result WHERE username = '{}' OR email = '{}';".format(
-        username, email)
+       phone_number, is_admin FROM users) result WHERE username = '{}' OR email = '{}';".format(username, email)
     cursor.execute(query)
     user = cursor.fetchone()
     return user
@@ -44,8 +43,8 @@ class User:
   # do a query to login the user into the system
   @staticmethod
   def login_user(username, password):
-    query = "SELECT row_to_json(users) FROM users WHERE username = '{}';"\
-      .format(username)
+    query = "SELECT row_to_json(results) FROM(SELECT user_id, username,email,\
+       phone_number, is_admin FROM users) results WHERE username = '{}', password ='{}';".format(username, password)
     cursor.execute(query)
     # returns the first record from the database that matches the\
     #  provided username.

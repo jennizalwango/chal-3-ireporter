@@ -13,7 +13,8 @@ class Validations:
                 "message": "Wrong content Type"
             }), 400
 
-        if "username" not in data or "password" not in data or "email" not in data or "phone_number" not in data or "is_admin" not in data:
+        if "username" not in data or "password" not in data or "email"\
+            not in data or "phone_number" not in data or "is_admin" not in data:
             return jsonify({
                 "status": 400,
                 "message": "wrong Body Format"
@@ -25,18 +26,48 @@ class Validations:
         phone_number = data.get("phone_number")
         is_admin = data.get("is_admin")
     
-        if not username or not email or not phone_number or not password:
+        if not username:
             return jsonify({
                 "status": 400,
-                "message": ["username/email/phone number/is_Admin/should not be empty", "password should not be empty"]
+                "message": "username should not be empty"
+            }), 400
+            elif not email:
+                return jsonify({
+                "status": 400,
+                "message": "Email should not be empty"
+            }), 400
+            elif not phone_number:
+                return jsonify({
+                "status": 400,
+                "message": "Phone_number should not be empty"
+            }), 400
+            elif not password:
+                return jsonify({
+                "status": 400,
+                "message": "Email should not be empty"
             }), 400
 
-        if not isinstance(username, str) or not isinstance(email, str) or not isinstance(is_admin,bool) or not isinstance(phone_number, int):
+        if not isinstance(username, str):
             return jsonify({
                 "status": 400,
-                "message": "username/email/should be strings,A phone number should be an integer, is_admin should be a Boolean"
+                "message": "Username should be strings"
             }), 400
-
+            elif not isinstance(email, str):
+                return jsonify({
+                "status": 400,
+                "message": "Email should be  strings"
+            }), 400
+            elif not isinstance(phone_number, int):
+                return jsonify({
+                "status": 400,
+                "message": "A phone number should be an integer"
+            }), 400
+            elif not isinstance(is_admin,bool):
+                return jsonify({
+                "status": 400,
+                "message": "is_admin should be a Boolean" 
+            }), 400
+                
         if not isinstance(phone_number, int) and len(phone_number)  > 12:
             return jsonify({
                 "status":400,
@@ -48,7 +79,8 @@ class Validations:
                 "status":400,
                 "message": "Wrong format of the email"
             }), 400
-
+            
+        # check if username doesnot have digits
         if re.search("[0-9]", username):
             return jsonify({
                 "status":400,
