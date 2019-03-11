@@ -8,7 +8,7 @@ from app.views.helper import token_required
 
 class CreateIncident(MethodView):
     @token_required
-    def post(current_user, self):
+    def post(self, current_user):
    
         contentType = request.content_type
         data = request.get_json()
@@ -38,7 +38,7 @@ class CreateIncident(MethodView):
         }), 201
     # this method gets all incidents and also gets us one incident
     @token_required
-    def get(current_user, self, incident_id):
+    def get(self, current_user, incident_id):
         if incident_id is None:
             if Incident.get_user_type(current_user) == "True":
                 return jsonify({
@@ -50,14 +50,21 @@ class CreateIncident(MethodView):
                 "message": "You cannot acess this endpoint"
             }),400
 
+        if Incident.check_incident_id(current_user):
+            return jsonify({
+                "status":400,
+                "message": "Incident with the requested id doesn't exist"
+            }),400
+
         if Incident.get_user_type(current_user):
             return jsonify({
                 "status": 200,
                 "data": Incident.get_an_incident(incident_id)[0]
             }),200
+
         
     @token_required
-    def put(current_user, self, incident_id):
+    def put( self, current_user,incident_id):
         location = request.json['location']
         if not isinstance(location, str):
             return jsonify({
@@ -96,7 +103,7 @@ class CreateIncident(MethodView):
 
 class Updates(MethodView):
     @token_required
-    def put(current_user, self, incident_id):
+    def put(self,current_user, incident_id):
         comment = request.json["comment"]
         if not isinstance(comment, str):
             return jsonify({
@@ -137,7 +144,7 @@ class Updates(MethodView):
 
 class Status(MethodView):
     @token_required
-    def put(current_user, self, incident_id):
+    def put(self, current_user, incident_id):
         status = request.json["status"]
         if not isinstance(status, str):
             return jsonify({
@@ -178,7 +185,7 @@ class Status(MethodView):
 
         
     @token_required
-    def delete(current_user, self, incident_id):
+    def delete(self, current_user, incident_id):
         if  not isinstance(incident_id, int):
             return  jsonify({
                 "status": 400,

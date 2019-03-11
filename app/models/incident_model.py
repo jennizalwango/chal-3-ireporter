@@ -19,7 +19,7 @@ class Incident:
     query = """
             INSERT INTO incident(incident_type, title, created_by, location, status, comment)
             VALUES('{}','{}', '{}', '{}', '{}', '{}')""".format(self.incident_type, self.title, self.created_by, self.location, self.status, self.comment)
-    self.cursor.execute(query)
+    self.dict_cursor.execute(query)
    
 
   @staticmethod
@@ -44,6 +44,13 @@ class Incident:
     cursor.execute(query)
     all_incidents = cursor.fetchall()
     return all_incidents
+
+  @staticmethod
+  def check_incident_id(incident_id):
+    query = "SELECT row_to_json(incident_id) FROM incident WHERE incident_id = '{}';".format(incident_id)
+    cursor.execute(query)
+    checking_incident_id = cursor.fetchone()
+    return checking_incident_id
 
   @staticmethod
   def update_location(user_id, incident_id, location):

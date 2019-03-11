@@ -31,7 +31,7 @@ class Validations:
                 "status": 400,
                 "message": "username should not be empty"
             }), 400
-            elif not email:
+            if not email:
                 return jsonify({
                 "status": 400,
                 "message": "Email should not be empty"
@@ -52,7 +52,7 @@ class Validations:
                 "status": 400,
                 "message": "Username should be strings"
             }), 400
-            elif not isinstance(email, str):
+            if not isinstance(email, str):
                 return jsonify({
                 "status": 400,
                 "message": "Email should be  strings"

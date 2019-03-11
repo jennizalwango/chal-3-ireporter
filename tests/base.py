@@ -1,6 +1,6 @@
 import json
 from unittest import TestCase
-from app import DatabaseConnection
+from conn_database.database import DatabaseConnection
 from app import app
 from app.models.user_model import User
 
