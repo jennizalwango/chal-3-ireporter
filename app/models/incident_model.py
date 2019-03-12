@@ -69,7 +69,7 @@ class Incident:
   
   @staticmethod
   def get_user_type(user_id):
-    query = "SELECT is_admin FROM users WHERE user_id = '{}'".format(str(user_id))
+    query = "SELECT is_admin FROM users WHERE user_id = '{}'".format(user_id)
     cursor.execute(query)
     get_the_user = cursor.fetchone()
     return get_the_user[0]

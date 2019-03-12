@@ -34,8 +34,7 @@ class LoginUser(MethodView):
     contentType = request.content_type
 
     validate_login = Validations()
-    if validate_login.login_val
-    idations(contentType, data) is not True:
+    if validate_login.login_validations(contentType, data) is not True:
       return validate_login.login_validations(contentType, data)
 
     return User.login_user(data["username"], data["password"])

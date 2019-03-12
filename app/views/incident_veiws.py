@@ -3,17 +3,16 @@ from flask.views import MethodView
 from flask import request, jsonify
 from app.views.validations import Validations
 from app.models.incident_model import Incident
-from app.views.helper import token_required
+from app.views.helper import token_required,get_current_user
 
 
 class CreateIncident(MethodView):
 
     @token_required
-    def post(self, current_user):
-
+    def post(self):
         contentType = request.content_type
         data = request.get_json()
-        print(current_user)
+        current_user = get_current_user()
 
         # validate posted data for create incident
         validate_create_incident = Validations()
@@ -21,7 +20,8 @@ class CreateIncident(MethodView):
             return validate_create_incident.create_incident_validate(contentType, data)
 
         # get_user_type is a method that gets us the user_id which is actually the same as our current_user.this helps us to check for is_admin is true or not if an admin then you cannotcreate incidents
-        if Incident.get_user_type(current_user) == "True":
+        get_user = Incident.get_user_type(current_user)
+        if get_user == "True":
             return jsonify({
                 "status":401,
                 "messsage":"You donot have acess to this endpoint"
@@ -40,7 +40,8 @@ class CreateIncident(MethodView):
         }), 201
     # this method gets all incidents and also gets us one incident
     @token_required
-    def get(self, current_user, incident_id):
+    def get(self, incident_id):
+        current_user = get_current_user()
         if incident_id is None:
             if Incident.get_user_type(current_user) == "True":
                 return jsonify({

@@ -21,7 +21,6 @@ def token_required(func):
             }), 400
         try:
             user_id = User.decode_auth_token(token)
-            print (user_id)
             current_user = user_id
             if not isinstance(current_user, int):
                 return jsonify({
@@ -38,9 +37,11 @@ def token_required(func):
                 "message": message
             }), 401
 
-        print(current_user)
-
-        return func(current_user, *args, **kwargs)
-        # return func(*args, **kwargs)
+        return func(*args, **kwargs)
 
     return decorated
+
+def get_current_user():
+    token = request.headers['auth_token']
+    extract_user_id = User.decode_auth_token(token)
+    return extract_user_id
