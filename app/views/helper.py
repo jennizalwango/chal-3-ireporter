@@ -2,14 +2,10 @@ import datetime
 import jwt
 from functools import wraps
 from flask import request, jsonify
-from app.config import BaseConfig
 from app.conn_database.database import DatabaseConnection
 from app.models.user_model import User
 
 db = DatabaseConnection()
-configuration = BaseConfig()
-
-configuration.SECRET_KEY
 
 def token_required(func):
     @wraps(func)
@@ -25,6 +21,7 @@ def token_required(func):
             }), 400
         try:
             user_id = User.decode_auth_token(token)
+            print (user_id)
             current_user = user_id
             if not isinstance(current_user, int):
                 return jsonify({
@@ -41,6 +38,9 @@ def token_required(func):
                 "message": message
             }), 401
 
+        print(current_user)
+
         return func(current_user, *args, **kwargs)
+        # return func(*args, **kwargs)
 
     return decorated

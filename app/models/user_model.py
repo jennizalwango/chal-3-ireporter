@@ -1,7 +1,7 @@
 import datetime
 import jwt
 from flask import jsonify
-from app import app 
+from app import config
 from app.conn_database.database import DatabaseConnection
 from passlib.hash import sha256_crypt
 
@@ -42,32 +42,31 @@ class User:
 
   # do a query to login the user into the system
   @staticmethod
-  def login_user(username,password):
-    query = "SELECT row_to_json(results) FROM (SELECT user_id, username,\
-       email,phone_number, is_admin FROM users)results WHERE username = '{}'\
-          AND password = '{}'".format(username, password)
+  def login_user(username, password):
+    query = "SELECT row_to_json(users) FROM users WHERE username ='{}';".format(
+        username)
     cursor.execute(query)
-    # returns the first record from the database that matches the\
-    #  provided username.
+    # returns the first record from the database that matches the provided username.
     user_login = cursor.fetchone()
-    # check if the user_login list is not empty and also if the provided \
-    # password matches with the hashed password in our database.
+    print (user_login[0]['user_id'])
+    # check if the user_login list is not empty and also if the provided password matches with the hashed password in our database.
 
     if user_login and sha256_crypt.verify(password,user_login[0]['password']):
-    # if user_login and bcrypt.check_password_hash(user_login[0]['password'],\
-    #  password):
+    # if user_login and bcrypt.check_password_hash(user_login[0]['password'], password):
       return jsonify({
         'status': 200,
-        # we call a class user in our user model and the method that \
-        # generates the token, we also  decode the bcause we want to be able to see the token
-        'data': [{"token": User.encode_auth_token(user_login[0]['user_id'])\
-          .decode('utf-8'), "user": user_login[0], "message": "Login sucessful"}]
+        # we call a class user in our user model and the method that generates the token, we also  decode the bcause we want to be able to see the token
+        'data': [{
+          "token": User.encode_auth_token(user_login[0]['user_id']),
+          "user":user_login[0],
+          "message": "Login sucessful" 
+        }]
       }), 200
-
     return jsonify({
-      "status": 401, 
-      "error": "User does not exist or password is incorrect"
+      "status":401, 
+      "error":"User does not exist or password is incorrect"
       }), 401
+
 
   # do a method that is going to encode our token so that its generated
   # the token will cotains the data we want to encrpyt, expiring time
@@ -86,11 +85,12 @@ class User:
         # return the generated encrpyted token.
         return jwt.encode(
             payload,
-            app.config["SECRET_KEY"],
+            config.SECRET_KEY,
             algorithm='HS256'
-        )
+        ).decode('utf-8')
     except Exception as error:
-        return error
+      print("something wrong happened: {}".format(str(error)))
+        
 
   # """Decoding the token to get the payload and then return \
   # the user Id in 'sub'
@@ -102,7 +102,11 @@ class User:
     try:
        # to decode the token, u need to pass in the token to be decoded, \
        # the key u used to encrypt it, and the method to use to decode it
-      payload = jwt.decode(token, app.config["SECRET_KEY"], algorithms='HS256')
+      payload = jwt.decode(
+        token, 
+        config.SECRET_KEY, 
+        algorithms='HS256'
+        )
       # All our expired or invaild tokens will be stored in blacklist_token \
       # table so that they are not used again.To do this we use a class and \
       # a method to actually check if the token is valid or not
@@ -118,11 +122,6 @@ class User:
     except jwt.InvalidTokenError:
       return "Invalid Key.Please sign in again"
 
-  # def drop_table_users(self):
-  #     query = "DROP TABLE users CASCADE;"
-  #     self.cursor.execute(query)
-  #     return "Dropped"
-
 
 class BlacklistToken:
   def __init__(self, token):
@@ -133,7 +132,7 @@ class BlacklistToken:
     """Persist Blacklisted token in the database
     :return:
     """
-    cursor = db.connect_cursor()
+    cursor = db.dict_cursor()
     query = "INSERT INTO blacklist_token(token, blacklisted_on) VALUES('{}',\
        '{}')".format(self.token, self.Blacklisted_on)
     cursor.execute(query, (self.token, self.Blacklisted_on))
@@ -144,7 +143,6 @@ class BlacklistToken:
     :param token: Authorization token
     :return:
     """
-    cursor = db.connect_cursor()
     query = """SELECT token FROM blacklist_token WHERE token = '{}'"""
     cursor.execute(query, (token))
     response = cursor.fetchone()

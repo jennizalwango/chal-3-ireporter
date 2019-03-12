@@ -19,7 +19,7 @@ class Incident:
     query = """
             INSERT INTO incident(incident_type, title, created_by, location, status, comment)
             VALUES('{}','{}', '{}', '{}', '{}', '{}')""".format(self.incident_type, self.title, self.created_by, self.location, self.status, self.comment)
-    self.dict_cursor.execute(query)
+    cursor.execute(query)
    
 
   @staticmethod
@@ -69,7 +69,7 @@ class Incident:
   
   @staticmethod
   def get_user_type(user_id):
-    query = "SELECT is_admin FROM users WHERE user_id = '{}'".format(user_id)
+    query = "SELECT is_admin FROM users WHERE user_id = '{}'".format(str(user_id))
     cursor.execute(query)
     get_the_user = cursor.fetchone()
     return get_the_user[0]

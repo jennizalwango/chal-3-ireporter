@@ -16,7 +16,7 @@ class Development(BaseConfig):
 class Testing(BaseConfig):
   DEBUG = True
   TESTING = True
-  DATABASE_NAME = os.environ.get("DATABASE_NAME", "testdb")
+  DATABASE_NAME = "testdb"
 
 class Production(BaseConfig):
   DEBUG = False

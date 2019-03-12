@@ -7,11 +7,13 @@ from app.views.helper import token_required
 
 
 class CreateIncident(MethodView):
+
     @token_required
     def post(self, current_user):
-   
+
         contentType = request.content_type
         data = request.get_json()
+        print(current_user)
 
         # validate posted data for create incident
         validate_create_incident = Validations()

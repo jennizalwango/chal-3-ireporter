@@ -44,13 +44,13 @@ class Validations:
             elif not password:
                 return jsonify({
                 "status": 400,
-                "message": "Email should not be empty"
+                "message": "Password should not be empty"
             }), 400
 
-        if not isinstance(username, str):
+        if not isinstance(username, str) and len(password) < 5:
             return jsonify({
                 "status": 400,
-                "message": "Username should be strings"
+                "message": "Username should be strings and password should have more than 5 characters"
             }), 400
             if not isinstance(email, str):
                 return jsonify({

@@ -1,46 +1,25 @@
 import os
 import psycopg2
 from app import app
-from app.config import configuration
-
-config = configuration.get(os.environ.get("APP_ENV", "development"))
-config1 = configuration.get(os.environ.get("TEST_ENV", "testing"))
-app.config.from_object(config)
+from app import config
 
 class DatabaseConnection:
   def __init__(self):
     try:
-      if os.environ.get("APP_ENV") == "development":
         self.connection = psycopg2.connect(
           database = config.DATABASE_NAME, 
           password = config.DATABASE_PASSWORD, 
           user = config.DATABASE_USER, 
           host = config.DATABASE_HOST, 
-          port = 5432)
+          port = config.DATABASE_PORT
+          )
         self.connection.autocommit = True
         self.dict_cursor = self.connection.cursor()
         self.create_tables()
-      if os.environ.get("APP_ENV1") == "testing":
-        self.connection = psycopg2.connect(
-          database = config.DATABASE_NAME,
-          password = config.DATABASE_PASSWORD,
-          user = config.DATABASE_USER,
-          host = config.DATABASE_HOST, 
-          port = 5432)
-
-      if os.environ.get("APP_ENV2") == "production":
-        if os.environ.get("database") == 'heroku':
-         self.connection = psycopg2.connect(
-           database = "d7lrmgbjs3a0im",
-           user="qzgoznoygmxmvo", password="da463569b47a5c48c1c7e0b19bf91e3535c4e3ace4bba892260bf9850c9f6e88",host="ec2-23-21-165-188.compute-1.amazonaws.com",
-           port=5432
-         )
-        else: 
-          self.connection = psycopg2.connect(database ="testdb")
     except Exception as ex:
-      print("Database connection error: "+str(ex))
-
+      print("Database connection error: {}".format(str(ex)))
             
+
   def create_tables(self):
     create_all_tables = (
           """CREATE TABLE IF NOT EXISTS users
